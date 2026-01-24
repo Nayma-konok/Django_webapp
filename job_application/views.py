@@ -19,7 +19,11 @@ def index(request):
             
             message_body=f"A new job application was submitted.Thank you, {first_name}"
             email_message=EmailMessage("Form submission confirmation", message_body, to=[email])
-            email_message.send()
+            try:
+                email_message.send(fail_silently=False)  # will raise exception if it fails
+            except Exception as e:
+                # Email failed, but app will not crash
+                print(f"Email sending failed: {e}")
 
             messages.success(request, "Form submitted successfully!")
             
